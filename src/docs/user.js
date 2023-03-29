@@ -1,194 +1,109 @@
-module.exports = usersDoc = {
-  "/users": {
-    post: {
-      security: [
-        {
-          bearer: [],
-        },
-      ],
-      tags: ["users"],
-      summary: "Create a new user",
-      description: "Create a new user",
-      requestBody: {
-        content: {
-          "application/json": {
-            schema: {
-              type: "object",
-              properties: {
-                name: {
-                  description: "User name",
-                  type: "string",
-                  required: true,
+module.exports = {
+  openapi: "3.0.0",
+  info: {
+    title: "Place Dream API",
+    description: "APIREST Place Dream",
+    version: "1.0.0",
+    contact: {
+      email: "jflavioinacio22@gmail.com",
+    },
+    license: {
+      name: "MIT License",
+      url: "https://opensource.org/licenses/MIT",
+    },
+  },
+  components: {
+    securitySchemes: {
+      bearer: {
+        type: "http",
+        scheme: "bearer",
+      },
+    },
+  },
+  security: {
+    bearer: [],
+  },
+  paths: {
+    "/users": {
+      post: {
+        security: [
+          {
+            bearer: [],
+          },
+        ],
+        tags: ["users"],
+        summary: "Create a new user",
+        description: "Create a new user",
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  name: {
+                    nome: "Nome do usuário",
+                    type: "string",
+                    required: true,
+                  },
+                  cpf: {
+                    description: "CPF do usuário",
+                    type: "string",
+                    required: true,
+                  },
+                  nascimento: {
+                    description: "Data de nascimento do usuário",
+                    type: "string",
+                    required: false,
+                  }
                 },
-                email: {
-                  description: "This e-mail will be used for login",
-                  type: "string",
-                  required: true,
+                example: {
+                  nome: "Carlos",
+                  cpf: "xxx.xxx.xxx-xx",
+                  nascimento: "xx/xx/xxxx",
                 },
-                photo: {
-                  description: "Photo url",
-                  type: "string",
-                  required: false,
-                },
-                role: {
-                  description: "This password will be used for login",
-                  type: "string",
-                  required: true,
-                },
-                permissions: {
-                  description: "This password will be used for login",
-                  type: "array",
-                  required: true,
-                },
-                password: {
-                  description: "This password will be used for login",
-                  type: "string",
-                  required: true,
-                },
-              },
-              example: {
-                name: "Carlos",
-                email: "jCarlos@gmail.com",
-                photo:
-                  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-                role: "user",
-                permissions: ["create"],
-                password: "123456789",
               },
             },
           },
         },
-      },
-      responses: {
-        "201": {
-          description: "User created successfully",
-        },
-        "409": {
-          description: "Email already exists",
-        },
-      },
-    },
-    get: {
-      security: [
-        {
-          bearer: [],
-        },
-      ],
-      tags: ["users"],
-      summary: "Get all users",
-      description: "List all users",
-      responses: {
-        "200": {
-          description: "Success",
-        },
-      },
-    },
-  },
-  "/users/{id}": {
-    delete: {
-      security: [
-        {
-          bearer: [],
-        },
-      ],
-      tags: ["users"],
-      summary: "Delete user by ID",
-      description: "Delete user by ID",
-      parameters: [
-        {
-          name: "id",
-          in: "path",
-          schema: {
-            type: "string",
+        responses: {
+          "201": {
+            description: "Usuário criado com sucesso",
           },
-          required: true,
-        },
-      ],
-      responses: {
-        "201": {
-          description: "User removed successfully",
-        },
-        "401": {
-          description: "Token invalid, Token expired or Unauthorized",
-        },
-        "403": {
-          description: "User does not have access to this feature.",
-        },
-        "404": {
-          description: "User doesn't exist!",
+          "409": {
+            description: "Usuário já cadastrado no sistema",
+          },
         },
       },
     },
-    patch: {
-      security: [
-        {
-          bearer: [],
-        },
-      ],
-      tags: ["users"],
-      summary: "Update a user by ID",
-      description: "Update a user by ID",
-      requestBody: {
-        content: {
-          "application/json": {
+    "/users/{cpf}": {
+      get: {
+        security: [
+          {
+            bearer: [],
+          },
+        ],
+        tags: ["users"],
+        summary: "Get a single user by CPF",
+        description: "Get a single user by CPF",
+        parameters: [
+          {
+            name: "cpf",
+            in: "path",
             schema: {
-              type: "object",
-              properties: {
-                name: {
-                  description: "User name",
-                  type: "string",
-                  required: false,
-                },
-                photo: {
-                  description: "Photo url",
-                  type: "string",
-                  required: false,
-                },
-                role: {
-                  description: "Role user",
-                  type: "string",
-                  required: false,
-                  enum: ["admin", "user"],
-                },
-                permissions: {
-                  description: "Permissions user",
-                  type: "array",
-                  required: false,
-                },
-              },
-              example: {
-                name: "Carlos",
-                email: "jCarlos@gmail.com",
-                photo:
-                  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-                role: "user",
-                permissions: ["create"],
-              },
+              type: "string",
             },
+            required: true,
+          },
+        ],
+        responses: {
+          "200": {
+            description: "Success",
+          },
+          "404": {
+            description: "Usuário não encontrado",
           },
         },
       },
-      parameters: [
-        {
-          name: "id",
-          in: "path",
-          schema: {
-            type: "string",
-          },
-          required: true,
-        },
-      ],
-      responses: {
-        "201": {
-          description: "User updated successfully",
-        },
-        "401": {
-          description: "Token invalid, Token expired or Unauthorized",
-        },
-        "404": {
-          description: "User doesn't exist!",
-        },
-      },
-    },
-  },
+    }
+  }
 };
