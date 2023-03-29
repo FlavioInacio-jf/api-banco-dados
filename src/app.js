@@ -8,7 +8,7 @@ const { Router } = require("express");
 const { v4: uuidv4 } = require("uuid");
 
 const CustomError = require("./errors/CustomError")
-const usersDoc = require("./docs/user");
+const doc = require("./docs/doc");
 
 const app = express();
 const router = Router();
@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
   return res.redirect("/docs");
 });
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(usersDoc));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(doc));
 
 let users = [];
 
