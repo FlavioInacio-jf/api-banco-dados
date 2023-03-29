@@ -1,0 +1,21 @@
+version: "1.0"
+
+services:
+  backend:
+    container_name: api
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start
+    ports:
+      - 4000:4000
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    networks:
+      - nginx_net
+networks:
+  nginx_net:
+    external: true
